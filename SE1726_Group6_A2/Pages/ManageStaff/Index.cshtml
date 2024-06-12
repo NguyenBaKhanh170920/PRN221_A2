@@ -1,0 +1,91 @@
+﻿@page
+@model SE1726_Group6_A2.Pages.ManageStaff.IndexModel
+@using Microsoft.AspNetCore.Http
+@using SE1726_Group6_A2.Models;
+@using Newtonsoft.Json;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    var acc = JsonConvert.DeserializeObject<Staff>(HttpContext.Session.GetString("acc"));
+}
+<dl class="row">
+    <dt class="col-sm-3">
+        <h5>Hello @acc.Name</h5><hr class="no-margin">
+        @if (acc.Role == 1)
+        {
+            <a asp-page="/ManageStaff/Index">Staff Management</a>
+            <br />
+            <br />
+            <a asp-page="/Products/Index">Product Management</a>
+            <br />
+        }
+        @if (acc.Role == 0)
+        {
+            <br />
+            <a asp-page="/Order/Index">Order Management</a>
+            <br />
+        }
+        <br />
+        <a asp-page="/Profile/Profile">Profile </a>
+        <br />
+        <br />
+        <a asp-page="/Report/Report">Order Report</a>
+        <br />
+        <br />
+        <a asp-page="/Login/LogOut">LOG OUT</a>
+        <br />
+    </dt>
+    <dt class="col-sm-9">
+        <h1>ManageStaff</h1>
+        <form method="get">
+            <div class="form-group">
+                <label asp-for="SearchByName"></label>
+                <input type="text" asp-for="SearchByName" class="form-control" />
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+
+        <p>
+            <a asp-page="Create">Create New</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Staff[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Staff[0].Password)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Staff[0].Role)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Staff)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Password)
+                        </td>
+                        <td>
+
+                            @((item.Role == 1) ? "Admin" : "User")
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.StaffId">Edit</a> |
+                            <a asp-page="./Details" asp-route-id="@item.StaffId">Details</a> |
+                            <a asp-page="./Delete" asp-route-id="@item.StaffId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </dt>
+</dl>

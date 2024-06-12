@@ -1,0 +1,129 @@
+﻿@page
+@model SE1726_Group6_A2.Pages.Order.IndexModel
+@using Microsoft.AspNetCore.Http
+@using SE1726_Group6_A2.Models;
+@using Newtonsoft.Json;
+
+@{
+    var acc = JsonConvert.DeserializeObject<Staff>(HttpContext.Session.GetString("acc"));
+}
+<dl class="row">
+    <dt class="col-sm-3">
+        <h5>Hello @acc.Name</h5><hr class="no-margin">
+        @if (acc.Role == 1)
+        {
+            <a asp-page="/ManageStaff/Index">Staff Management</a>
+            <br />
+            <br />
+            <a asp-page="/Products/Index">Product Management</a>
+            <br />
+        }
+        @if (acc.Role == 0)
+        {
+            <br />
+            <a asp-page="/Order/Index">Order Management</a>
+            <br />
+        }
+        <br />
+        <a asp-page="/Profile/Profile">Profile </a>
+        <br />
+        <br />
+        <a asp-page="/Report/Report">Order Report</a>
+        <br />
+        <br />
+        <a asp-page="/Login/LogOut">LOG OUT</a>
+        <br />
+    </dt>
+    <dt class="col-sm-9">
+        <div class="d-flex">
+            <div class="col-7">
+                <h1>List Order</h1>
+                <form method="post" asp-page-handler="Search">
+                    <input type="date" id="searchDate" name="searchDate" value="@Model.SearchDate?.ToString("yyyy-MM-dd")" />
+                    <button class="btn btn-primary" type="submit" value="Search">Search</button>
+                </form>
+
+                <form asp-page="./Add" method="post">
+                    <input value="Add Order" type="submit" />
+                </form>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>OrderId</td>
+                            <td>Date</td>
+                            <td>Action</td>
+                            <td>Action</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.orders)
+                        {
+                            <tr>
+                                <td>@item.OrderId</td>
+                                <td>@item.OrderDate</td>
+                                <td><a asp-page-handler="DetailOrder" asp-route-orderId="@item.OrderId">Detail</a></td>
+                                <td><a asp-page="Update" asp-route-orderId="@item.OrderId">Update</a></td>
+                                <td><a asp-page-handler="DeleteOrder" asp-route-orderId="@item.OrderId">Delete</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-4">
+                @if (@Model.orderId != 0)
+                {
+                    <a asp-page="AddDetail" asp-route-orderId="@Model.orderId">Add new order detail </a>
+                }
+
+                @if (Model.orderDetail.Count > 0)
+                {
+                    <h4>Order Details</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>OrderDetailId</th>
+                                <th>OrderId</th>
+                                <th>ProductName</th>
+                                <th>Quantity</th>
+                                <th>UnitPrice</th>
+                                <th>Action</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var od in Model.orderDetail)
+                            {
+                                <tr>
+                                    <td>@od.OrderDetailId</td>
+                                    <td>@od.OrderId</td>
+                                    <td>@od.Product.ProductName</td>
+                                    <td>@od.Quantity</td>
+                                    <td>@od.UnitPrice</td>
+                                    <td>
+                                        <a asp-page-handler="DeleteOrderDetail" asp-route-orderDetailId="@od.OrderDetailId">Delete</a>
+                                    </td>
+                                    <td>
+                                        <a asp-page="UpdateDetail" asp-route-orderDetailId="@od.OrderDetailId">Update</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
+        <script>
+            let today = new Date();
+            document.getElementById('searchDate').value = document.getElementById('searchDate').value || getDate(today);
+
+            function getDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+        </script>
+    </dt>
+</dl>

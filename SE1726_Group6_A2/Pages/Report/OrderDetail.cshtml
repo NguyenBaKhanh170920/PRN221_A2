@@ -1,0 +1,26 @@
+﻿@page "/Report/Detail{id}"
+@using SE1726_Group6_A2.Models
+@model SE1726_Group6_A2.Pages.Report.OrderDetailModel
+@{
+    List<OrderDetail> list = ViewData["data"] as List<OrderDetail>;
+}
+<table class="table">
+    <tr>
+        <th>Order Detail Id</th>
+        <th>Order Id</th>
+        <th>Product Id</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+    </tr>
+    @foreach (OrderDetail x in list)
+    {
+        <tr>
+            <td>@x.OrderDetailId</td>
+            <td>@x.OrderId</td>
+            <td>@x.ProductId</td>
+            <td>@x.Quantity</td>
+            <td>@x.UnitPrice</td>
+        </tr>
+    }
+</table>
+<a asp-page="./Report">Back to List</a>

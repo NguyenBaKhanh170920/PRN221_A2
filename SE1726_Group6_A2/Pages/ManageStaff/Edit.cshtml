@@ -1,0 +1,83 @@
+﻿@page
+@model SE1726_Group6_A2.Pages.ManageStaff.EditModel
+@using Microsoft.AspNetCore.Http
+@using SE1726_Group6_A2.Models;
+@using Newtonsoft.Json;
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    var acc = JsonConvert.DeserializeObject<Staff>(HttpContext.Session.GetString("acc"));
+}
+
+<dl class="row">
+    <dt class="col-sm-3">
+        <h5>Hello @acc.Name</h5><hr class="no-margin">
+        @if (acc.Role == 1)
+        {
+            <a asp-page="/ManageStaff/Index">Staff Management</a>
+            <br />
+            <br />
+            <a asp-page="/Products/Index">Product Management</a>
+            <br />
+        }
+        @if (acc.Role == 0)
+        {
+            <br />
+            <a asp-page="/Order/Index">Order Management</a>
+            <br />
+        }
+        <br />
+        <a asp-page="/Profile/Profile">Profile </a>
+        <br />
+        <br />
+        <a asp-page="/Report/Report">Order Report</a>
+        <br />
+        <br />
+        <a asp-page="/Login/LogOut">LOG OUT</a>
+        <br />
+    </dt>
+    <dt class="col-sm-9">
+        <h1>Edit</h1>
+
+        <h4>Staff</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Staff.StaffId" />
+                    <div class="form-group">
+                        <label asp-for="Staff.Name" class="control-label"></label>
+                        <input asp-for="Staff.Name" class="form-control" />
+                        <span asp-validation-for="Staff.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Staff.Password" class="control-label"></label>
+                        <input asp-for="Staff.Password" class="form-control" />
+                        <span asp-validation-for="Staff.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Staff.Role" class="control-label"></label>
+                        <select asp-for="Staff.Role" class="form-control">
+                            <option value="0">User</option>
+                            <option value="1">Admin</option>
+                        </select>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <a asp-page="./Index">Back to List</a>
+        </div>
+
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }
+    </dt>
+</dl>

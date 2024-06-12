@@ -1,0 +1,71 @@
+﻿@page
+@model SE1726_Group6_A2.Pages.ManageStaff.DetailsModel
+@using Microsoft.AspNetCore.Http
+@using SE1726_Group6_A2.Models;
+@using Newtonsoft.Json;
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    var acc = JsonConvert.DeserializeObject<Staff>(HttpContext.Session.GetString("acc"));
+}
+<dl class="row">
+    <dt class="col-sm-3">
+        <h5>Hello @acc.Name</h5><hr class="no-margin">
+        @if (acc.Role == 1)
+        {
+            <a asp-page="/ManageStaff/Index">Staff Management</a>
+            <br />
+            <br />
+            <a asp-page="/Products/Index">Product Management</a>
+            <br />
+        }
+        @if (acc.Role == 0)
+        {
+            <br />
+            <a asp-page="/Order/Index">Order Management</a>
+            <br />
+        }
+        <br />
+        <a asp-page="/Profile/Profile">Profile </a>
+        <br />
+        <br />
+        <a asp-page="/Report/Report">Order Report</a>
+        <br />
+        <br />
+        <a asp-page="/Login/LogOut">LOG OUT</a>
+        <br />
+    </dt>
+    <dt class="col-sm-9">
+        <h1>Details</h1>
+
+        <div>
+            <h4>Staff</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Staff.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Staff.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Staff.Password)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Staff.Password)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Staff.Role)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Staff.Role)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a asp-page="./Edit" asp-route-id="@Model.Staff.StaffId">Edit</a> |
+            <a asp-page="./Index">Back to List</a>
+        </div>
+    </dt>
+</dl>

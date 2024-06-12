@@ -1,0 +1,63 @@
+﻿@page "/Report/{date1?}/{date2?}"
+@model SE1726_Group6_A2.Pages.Report.ReportModel
+@using Microsoft.AspNetCore.Http
+@using SE1726_Group6_A2.Models;
+@using Newtonsoft.Json;
+@{
+    IQueryable<ViewDTO> list = ViewData["data"] as IQueryable<ViewDTO>;
+    var acc = JsonConvert.DeserializeObject<Staff>(HttpContext.Session.GetString("acc"));
+}
+<dl class="row">
+    <dt class="col-sm-3">
+        <h5>Hello @acc.Name</h5><hr class="no-margin">
+        @if (acc.Role == 1)
+        {
+            <a asp-page="/ManageStaff/Index">Staff Management</a>
+            <br />
+            <br />
+            <a asp-page="/Products/Index">Product Management</a>
+            <br />
+        }
+        @if (acc.Role == 0)
+        {
+            <br />
+            <a asp-page="/Order/Index">Order Management</a>
+            <br />
+        }
+        <br />
+        <a asp-page="/Profile/Profile">Profile </a>
+        <br />
+        <br />
+        <a asp-page="/Report/Report">Order Report</a>
+        <br />
+        <br />
+        <a asp-page="/Login/LogOut">LOG OUT</a>
+        <br />
+    </dt>
+    <dt class="col-sm-9">
+        <h1>Order Report</h1>
+        <form method="post">
+            Date from: <input type="datetime" name="date1" value=@ViewData["date1"] />   to: <input type="datetime" name="date2" value=@ViewData["date2"] />
+            <input type="submit" value="Search" />
+        </form>
+        <table class="table">
+            <tr>
+                <th>Order Id</th>
+                <th>Order Date</th>
+                <th>Staff</th>
+                <th></th>
+            </tr>
+            @foreach (ViewDTO x in list)
+            {
+                <tr>
+                    <td>@x.Id</td>
+                    <td>@x.DateTime</td>
+                    <td>@x.Name</td>
+                    <th>
+                        <a asp-page="./OrderDetail" asp-route-id="@x.Id">Detail</a>
+                    </th>
+                </tr>
+            }
+        </table>
+    </dt>
+</dl>
