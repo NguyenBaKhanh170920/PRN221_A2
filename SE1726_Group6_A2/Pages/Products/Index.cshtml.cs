@@ -59,7 +59,7 @@ namespace SE1726_Group6_A2.Pages.Products
             }
             else
             {
-                Product = await _context.Products.ToListAsync();
+                Product = await _context.Products.Include(p=>p.Category).ToListAsync();
             }
         }
     }

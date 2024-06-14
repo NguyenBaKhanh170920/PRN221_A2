@@ -21,6 +21,7 @@ namespace SE1726_Group6_A2.Pages.Profile
             var old = _storeContext.Staffs.FirstOrDefault(x => x.StaffId == id);
             old.Name = name;
             old.Password = pass;
+            old.Role = role;    
             _storeContext.Update(old);
             _storeContext.SaveChanges();
             HttpContext.Session.SetString("acc", JsonConvert.SerializeObject(old));
